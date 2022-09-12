@@ -13,7 +13,7 @@ ENV TZ=UTC
 # Packages install
 RUN apt-get update \
     && apt-get install -y gnupg gosu curl ca-certificates zip unzip git supervisor  \
-    sqlite3 libcap2-bin libpng-dev mc make
+    sqlite3 libcap2-bin libpng-dev mc make librdkafka-dev
 
 # Add php repository
 RUN mkdir -p ~/.gnupg \
@@ -25,7 +25,7 @@ RUN mkdir -p ~/.gnupg \
 
 # Install php
 RUN apt-get update \
-    && apt-get install -y php8.1-cli
+    && apt-get install -y php8.1-cli php8.1-dev
 
 # Install php extensions
 RUN apt-get install -y php8.1-gd \
@@ -34,11 +34,17 @@ RUN apt-get install -y php8.1-gd \
        php8.1-intl php8.1-readline \
        php8.1-redis php8.1-xdebug
 
+# Install kafka php extension
+RUN curl -O https://pear.php.net/go-pear.phar
+RUN php go-pear.phar
+RUN pecl channel-update pecl.php.net && pecl install rdkafka
+
 # Install php composer
 RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
 
 # Clean instalation
 RUN apt-get -y autoremove \
+    && apt-get list --installed -a '*-dev' | grep "^[^\ ]*/" -o | sed 's/\///' | xargs -I '{}' apt-get remove -y '{}' \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -49,6 +55,7 @@ COPY start-container /usr/local/bin/start-container
 
 COPY php.ini /etc/php/8.1/cli/conf.d/99-micro.ini
 COPY xdebug.ini /etc/php/8.1/cli/conf.d/99-xdebug.ini
+COPY rdkafka.ini /etc/php/8.1/cli/conf.d/99-rdkafka.ini
 
 RUN chmod +x /usr/local/bin/start-container
 
