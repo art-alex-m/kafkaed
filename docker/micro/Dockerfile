@@ -9,6 +9,7 @@ WORKDIR /var/www/html
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV TZ=UTC
+ENV NODE_VERSION=18
 
 # Packages install
 RUN apt-get update \
@@ -41,6 +42,16 @@ RUN pecl channel-update pecl.php.net && pecl install rdkafka
 
 # Install php composer
 RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
+
+# Install Nodjs
+RUN curl -sL https://deb.nodesource.com/setup_$NODE_VERSION.x | bash - \
+    && apt-get install -y nodejs
+
+# Install Yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+    && echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
+    && apt-get update \
+    && apt-get install -y yarn
 
 # Clean instalation
 RUN apt-get -y autoremove \
