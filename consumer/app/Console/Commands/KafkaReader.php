@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Events\Kafkaed1SpeedIsUpdated;
 use Carbon\Exceptions\Exception;
 use Illuminate\Console\Command;
 use Junges\Kafka\Contracts\KafkaConsumerMessage;
@@ -68,6 +69,8 @@ class KafkaReader extends Command
         $speed = round($this->count / ($current - $this->start));
         $this->count = 1;
         $this->start = $current;
+
+        Kafkaed1SpeedIsUpdated::broadcast($speed);
 
         $this->output->write("<info>Speed: $speed msg/sec</info>\r");
     }
