@@ -13,7 +13,7 @@ ENV TZ=UTC
 # Packages install
 RUN apt-get update \
     && apt-get install -y gnupg gosu curl ca-certificates zip unzip git supervisor  \
-    sqlite3 libcap2-bin libpng-dev mc make librdkafka-dev
+    sqlite3 libcap2-bin libpng-dev mc make librdkafka-dev postgresql-client
 
 # Add php repository
 RUN mkdir -p ~/.gnupg \
@@ -28,7 +28,7 @@ RUN apt-get update \
     && apt-get install -y php8.1-cli php8.1-dev
 
 # Install php extensions
-RUN apt-get install -y php8.1-gd \
+RUN apt-get install -y php8.1-gd php8.1-pgsql \
        php8.1-curl php8.1-mbstring \
        php8.1-xml php8.1-zip php8.1-iconv \
        php8.1-intl php8.1-readline \

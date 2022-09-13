@@ -11,8 +11,6 @@ x-templates:
         WWWUSER: ${WWWUSER}
     env_file:
       - .env
-    volumes:
-      - './vendor:/var/www/vendor'
     networks:
       - kafka
     depends_on:
@@ -24,7 +22,6 @@ services:
   consumer:
     <<: *micro
     volumes:
-      - './vendor:/var/www/vendor'
       - './consumer:/var/www/html'
       - './docker/consumer/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf'
     links:
@@ -39,7 +36,6 @@ services:
   producer:
     <<: *micro
     volumes:
-      - './vendor:/var/www/vendor'
       - './producer:/var/www/html'
       - './docker/producer/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf'
     links:
@@ -54,7 +50,6 @@ services:
     expose:
       - 2222
     volumes:
-      - './vendor:/var/www/vendor'
       - './wsserver:/var/www/html'
       - './docker/wsserver/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf'
     networks:
@@ -62,13 +57,18 @@ services:
         ipv4_address: 10.100.115.25
         aliases:
           - kafka-ws.loc
+    depends_on:
+      - redis
+      - db
+    links:
+      - redis
+      - db
 
   web:
     <<: *micro
     expose:
       - 80
     volumes:
-      - './vendor:/var/www/vendor'
       - './web:/var/www/html'
       - './docker/web/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf'
     networks:
@@ -108,6 +108,24 @@ services:
     networks:
       - kafka
 
+  db:
+    image: 'postgres:14.2-alpine'
+    environment:
+      POSTGRES_MULTIPLE_DATABASES: ${DB_WEB}, ${DB_WEBSOCKET}
+      PGPASSWORD: ${DB_PASSWORD:-secret}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
+    volumes:
+      - 'kafkaed-db:/var/lib/postgresql/data'
+      - './docker/db:/docker-entrypoint-initdb.d'
+    networks:
+      kafka:
+        ipv4_address: 10.100.115.100
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}" ]
+      retries: 3
+      timeout: 5s
+
 networks:
   kafka:
     driver: bridge
@@ -116,3 +134,7 @@ networks:
         - subnet: 10.100.115.0/24
     driver_opts:
       com.docker.network.bridge.name: kafkaed
+
+volumes:
+  kafkaed-db:
+    driver: local
