@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use Junges\Kafka\Facades\Kafka;
 use Junges\Kafka\Message\Message;
+use Junges\Kafka\Producers\MessageBatch;
 
 /**
  * Class KafkaMessage.
@@ -38,13 +39,14 @@ class KafkaMessage extends Command
         $producer = Kafka::publishOn('kafkaed-1');
 
         while (true) {
-            foreach ([50, 100, 500, 1000] as $limit) {
-                $num = 0;
-                while (++$num <= $limit) {
-                    $producer->withMessage($this->createMessage($num))->send();
-                }
-                usleep(100);
+            $num = 0;
+            $limit = 500;
+            $batch = new MessageBatch();
+            while (++$num <= $limit) {
+                $batch->push($this->createMessage($num));
             }
+            $producer->sendBatch($batch);
+            usleep(6500);
         }
     }
 

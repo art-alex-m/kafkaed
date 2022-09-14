@@ -57,11 +57,13 @@ const gaugeOptions = {
     }
 };
 
+const maxLimit = 42000;
+
 // The speed gauge
 const chartSpeed = Highcharts.chart('container-speed', Highcharts.merge(gaugeOptions, {
     yAxis: {
         min: 0,
-        max: 1000,
+        max: maxLimit,
         title: {
             text: 'Speed'
         }
@@ -88,6 +90,8 @@ const chartSpeed = Highcharts.chart('container-speed', Highcharts.merge(gaugeOpt
 
 }));
 
+var resetSpeed = true;
+
 // Bring life to the dials
 export const updateSpeed = (speed) => {
     // Speed
@@ -101,7 +105,17 @@ export const updateSpeed = (speed) => {
     point = chartSpeed.series[0].points[0];
 
     if (newVal < 0) newVal = 0;
-    if (newVal > 1000) newVal = 1000;
+    if (newVal > maxLimit) newVal = maxLimit;
 
     point.update(newVal);
+    resetSpeed = false;
 };
+
+// Reset speed by timer
+setInterval(() => {
+    if (resetSpeed) {
+        updateSpeed(0);
+    } else {
+        resetSpeed = true;
+    }
+}, 2000);
