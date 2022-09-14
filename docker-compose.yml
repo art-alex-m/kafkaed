@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.9'
 
 x-templates:
   micro: &micro
@@ -94,6 +94,7 @@ services:
 
   kafka:
     image: confluentinc/cp-kafka:latest
+    cpu_count: 2
     depends_on:
       - zookeeper
     ports:

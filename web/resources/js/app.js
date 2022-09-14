@@ -1,6 +1,7 @@
 import './bootstrap';
+import {updateSpeed} from "./speedchart";
 
 Echo.channel('kafkaed-1-speed')
     .listen('Kafkaed1SpeedIsUpdated', (e) => {
-        console.log(e.speed);
+        updateSpeed(e.speed);
     });
