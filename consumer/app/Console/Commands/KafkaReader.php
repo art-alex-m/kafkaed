@@ -69,8 +69,9 @@ class KafkaReader extends Command
         $speed = round($this->count / ($current - $this->start));
         $this->count = 1;
         $this->start = $current;
+        $transmission = $message->getBody()['transmission'] ?? 0;
 
-        Kafkaed1SpeedIsUpdated::broadcast($speed);
+        Kafkaed1SpeedIsUpdated::broadcast($speed, $transmission);
 
         $this->output->write("<info>Speed: $speed msg/sec</info>\r");
     }

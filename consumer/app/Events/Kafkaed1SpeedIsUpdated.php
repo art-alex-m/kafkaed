@@ -16,16 +16,19 @@ class Kafkaed1SpeedIsUpdated implements ShouldBroadcastNow
     use Dispatchable;
 
     /** @var int Message processing speed */
-    public int $speed;
+    public readonly int $speed;
+    /** @var int Transmission of message generation */
+    public readonly int $transmission;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(int $speed)
+    public function __construct(int $speed, int $transmission)
     {
         $this->speed = $speed;
+        $this->transmission = $transmission;
     }
 
     /**

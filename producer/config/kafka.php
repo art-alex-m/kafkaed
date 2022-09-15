@@ -50,4 +50,9 @@ return [
      | Implement BatchRepositoryInterface to save batches in different storage
      */
     'batch_repository' => env('KAFKA_BATCH_REPOSITORY', \Junges\Kafka\BatchRepositories\InMemoryBatchRepository::class),
+
+    'transmission' => [
+        'min_timeout' => .0065,
+        'max_timeout' => .0500,
+    ],
 ];
