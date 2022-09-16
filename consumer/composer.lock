@@ -4,8 +4,39 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8d4191015771ee632c0f26cbc1a9dbb5",
+    "content-hash": "6abe62f3e740e7a57cc3c8660261cbb3",
     "packages": [
+        {
+            "name": "artalexm/kafkaed-common",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "../packages/kafkaed-common",
+                "reference": "3a8cc61bb7383a359a8f6a4059bed1ec17d789f1"
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Artalexm\\KafkaedCommon\\": "src/"
+                }
+            },
+            "license": [
+                "GPL-3.0-only"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander M Artamonov",
+                    "email": "art.alex.m@gmail.com"
+                }
+            ],
+            "description": "Common library for kafka education project",
+            "transport-options": {
+                "relative": true
+            }
+        },
         {
             "name": "beberlei/assert",
             "version": "v3.3.2",

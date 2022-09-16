@@ -22,6 +22,7 @@ services:
   consumer:
     <<: *micro
     volumes:
+      - './packages:/var/www/packages'
       - './consumer:/var/www/html'
       - './docker/consumer/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf'
     links:
@@ -36,6 +37,7 @@ services:
   producer:
     <<: *micro
     volumes:
+      - './packages:/var/www/packages'
       - './producer:/var/www/html'
       - './docker/producer/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf'
     links:
@@ -50,6 +52,7 @@ services:
     expose:
       - 2222
     volumes:
+      - './packages:/var/www/packages'
       - './wsserver:/var/www/html'
       - './docker/wsserver/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf'
     networks:
@@ -69,6 +72,7 @@ services:
     expose:
       - 80
     volumes:
+      - './packages:/var/www/packages'
       - './web:/var/www/html'
       - './docker/web/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf'
     networks:

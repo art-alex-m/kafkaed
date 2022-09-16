@@ -2,9 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Models\KafkaConfig;
+use Artalexm\KafkaedCommon\Messages\Transmission;
+use Artalexm\KafkaedCommon\Models\KafkaConfig;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Cache;
+use Junges\Kafka\Facades\Kafka;
+use Junges\Kafka\Message\Message;
 
 /**
  * Class KafkaSpeed.
@@ -34,7 +36,11 @@ class KafkaSpeed extends Command
      */
     public function handle(): int
     {
-        Cache::put(KafkaConfig::KAFKAED_1_CONFIG, $this->argument('speed') ?? 0);
+        $transmissionMsg = new Transmission(microtime(true), $this->argument('speed') ?? 0);
+
+        Kafka::publishOn(KafkaConfig::KAFKAED_1_CONTROL)
+            ->withMessage(new Message(body: $transmissionMsg))
+            ->send();
 
         return 0;
     }

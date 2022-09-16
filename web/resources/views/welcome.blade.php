@@ -39,6 +39,21 @@
 
         <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
             <div id="container-speed"></div>
+            <div id="control-speed" class="flex justify-center p-6"
+                 data-action="{{ route('api.transmission.update') }}">
+                <label><input id="speed-0" type="radio" name="transmission" value="0" checked
+                              class="transmission"> off</label>
+                <label><input id="speed-1" type="radio" name="transmission" value="1"
+                              class="transmission"> speed 1</label>
+                <label><input id="speed-2" type="radio" name="transmission" value="2"
+                              class="transmission"> speed 2</label>
+                <label><input id="speed-3" type="radio" name="transmission" value="3"
+                              class="transmission"> speed 3</label>
+                <label><input id="speed-4" type="radio" name="transmission" value="4"
+                              class="transmission"> speed 4</label>
+                <label><input id="speed-5" type="radio" name="transmission" value="5"
+                              class="transmission"> speed 5</label>
+            </div>
         </div>
 
         <div class="flex justify-center mt-4 sm:items-center sm:justify-between">

@@ -6,10 +6,12 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "artalexm/kafkaed-common": "^1.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
-        "laravel/tinker": "^2.7"
+        "laravel/tinker": "^2.7",
+        "mateusjunges/laravel-kafka": "^1.8"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -60,5 +62,11 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../packages/kafkaed-common"
+        }
+    ]
 }

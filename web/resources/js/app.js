@@ -1,4 +1,5 @@
 import './bootstrap';
+import './speedcontrol';
 import {updateSpeed} from "./speedchart";
 
 Echo.channel('kafkaed-1-speed')

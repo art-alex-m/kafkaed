@@ -1,0 +1,21 @@
+{
+    "name": "artalexm/kafkaed-common",
+    "description": "Common library for kafka education project",
+    "type": "library",
+    "license": "GPL-3.0-only",
+    "version": "1.0.0",
+    "autoload": {
+        "psr-4": {
+            "Artalexm\\KafkaedCommon\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Alexander M Artamonov",
+            "email": "art.alex.m@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.1"
+    }
+}

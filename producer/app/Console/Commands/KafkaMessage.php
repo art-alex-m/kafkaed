@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\KafkaConfig;
 use App\Models\Transmission;
+use Artalexm\KafkaedCommon\Models\KafkaConfig;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -34,16 +34,13 @@ class KafkaMessage extends Command
     protected $description = 'Send message to Kafka broker';
 
     protected int $updSpeedTimeout = 1;
-    protected string $kafkaed1Topic = 'kafkaed-1';
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle()
     {
-        $producer = Kafka::publishOn($this->kafkaed1Topic);
+        $producer = Kafka::publishOn(KafkaConfig::KAFKAED_1_MSGTOPIC);
         $speed = Transmission::from($this->option('speed'));
         $check = $speed->microtime();
         $updSpeed = $this->updateSpeedTime();
@@ -56,7 +53,7 @@ class KafkaMessage extends Command
                 $updSpeed = $this->updateSpeedTime();
             }
 
-            if ($speed->timeout() < 0) {
+            if ($speed->timeout() <= 0) {
                 usleep(500000);
                 continue;
             }
@@ -121,10 +118,7 @@ class KafkaMessage extends Command
     protected function updateSpeed(): Transmission
     {
         $speedValue = Cache::get(KafkaConfig::KAFKAED_1_CONFIG, $this->option('speed'));
-        $speed = Transmission::tryFrom($speedValue);
-        if (null === $speed) {
-            $speed = Transmission::SPEED_0;
-        }
+        $speed = Transmission::tryFrom($speedValue) ?? Transmission::SPEED_0;
 
         return $speed;
     }

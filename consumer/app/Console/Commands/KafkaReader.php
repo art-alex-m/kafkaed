@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Events\Kafkaed1SpeedIsUpdated;
+use Artalexm\KafkaedCommon\Models\KafkaConfig;
 use Carbon\Exceptions\Exception;
 use Illuminate\Console\Command;
 use Junges\Kafka\Contracts\KafkaConsumerMessage;
@@ -45,9 +46,9 @@ class KafkaReader extends Command
         $this->start = time();
 
         Kafka::createConsumer()
-            ->subscribe('kafkaed-1')
+            ->subscribe(KafkaConfig::KAFKAED_1_MSGTOPIC)
             ->withAutoCommit()
-            ->withHandler([$this, 'handleMessage'])
+            ->withHandler([$this, 'onMessage'])
             ->build()
             ->consume();
 
@@ -57,7 +58,7 @@ class KafkaReader extends Command
     /**
      * @param KafkaConsumerMessage $message
      */
-    public function handleMessage(KafkaConsumerMessage $message)
+    public function onMessage(KafkaConsumerMessage $message)
     {
         $this->count++;
         $current = time();
@@ -69,7 +70,7 @@ class KafkaReader extends Command
         $speed = round($this->count / ($current - $this->start));
         $this->count = 1;
         $this->start = $current;
-        $transmission = $message->getBody()['transmission'] ?? 0;
+        $transmission = optional((object)$message->getBody())->transmission ?? 0;
 
         Kafkaed1SpeedIsUpdated::broadcast($speed, $transmission);
 
