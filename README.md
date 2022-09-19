@@ -19,8 +19,8 @@
 4. В папке проекта из терминала запустить `docker-compose up -d`. Дождаться окончания сборки контейнеров.
 5. Сборка автоматически запускает установку пакетов composer. Первый запуск может затребовать больше времени в связи с
    установкой пакетов.
-6. Прописать в /etc/hosts алиас `10.100.115.25 kafka-ws.loc`
-7. Если все закончилось без ошибок, проект доступен по ссылке `http://10.100.115.15/`
+6. Прописать в /etc/hosts алиас `10.100.115.25 kafka-ws.loc`, `10.100.115.15 kafka-web.loc` (по желанию)
+7. Если все закончилось без ошибок, проект доступен по ссылке `http://10.100.115.15/` (`http://kafka-web.loc/`)
 
 ### Примечание 1
 
@@ -29,3 +29,14 @@
 времени
 простоя используются параметры `transmission.min_timeout` и `transmission.max_timeout` в
 файле `producer/config/kafka.php`
+
+### Источники
+
+- https://ru.wikipedia.org/wiki/Apache_Kafka
+- https://habr.com/ru/company/piter/blog/352978/
+- https://habr.com/ru/company/piter/blog/536360/
+- https://habr.com/ru/company/piter/blog/531434/
+- https://www.baeldung.com/ops/kafka-docker-setup
+- https://ru.wikipedia.org/wiki/WebSocket
+- https://beyondco.de/docs/laravel-websockets/advanced-usage/app-providers
+- https://github.com/beyondcode/laravel-websockets
